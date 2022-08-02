@@ -22,7 +22,7 @@ class AcidBoxExtractor(object):
         for i in range(len(data)):
             data[i] ^= self.KEY[i % 8]
 
-        marker: str = data[0:4].hex()
+        marker: str = data[:4].hex()
         uncompressed_crc32: str = hex(int.from_bytes(data[4:8], byteorder='little'))
         uncompressed_size: int = int.from_bytes(data[8:12], byteorder='little')
         option: int = int.from_bytes(data[12:16], byteorder='little')

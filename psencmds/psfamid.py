@@ -332,15 +332,15 @@ def base64unfurl(inputString):
     except:
 
         try:
-            data = base64.b64decode(inputString[0:-1])
+            data = base64.b64decode(inputString[:-1])
         except:
 
             try:
-                data = base64.b64decode(inputString[0:-2])
+                data = base64.b64decode(inputString[:-2])
             except:
 
                 try:
-                    data = base64.b64decode(inputString[0:-3])
+                    data = base64.b64decode(inputString[:-3])
                 except:
                     pass
 
